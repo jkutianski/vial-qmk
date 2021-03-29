@@ -24,6 +24,8 @@
 #define MATRIX_ROWS 8
 #define MATRIX_COLS 16
 
+#define MATRIX_HAS_GHOST
+
 /* key matrix pins */
 #define MATRIX_ROW_PINS \
     { A0, A1, A2, A3, A4, A5, A6, A7 }
