@@ -1,0 +1,31 @@
+{
+  "name": "Baldor MacroPad84",
+  "vendorId": "0xfeed",
+  "productId": "0x2b29",
+  "lighting": "qmk_rgblight",
+  "matrix": {
+    "rows": 2,
+    "cols": 1
+  },
+  "layouts": {
+    "keymap": [
+      [
+        {
+          "c": "#aaaaaa"
+        },
+        "8,0",
+        {
+          "x": 0.25
+        },
+        "0,0\n\n\n\n\n\n\n\n\ne",
+        "0,1\n\n\n\n\n\n\n\n\ne"
+      ],
+      [
+        "7,0"
+      ]
+    ]
+  },
+  "vial": {
+    "vibl": true
+  }
+}
