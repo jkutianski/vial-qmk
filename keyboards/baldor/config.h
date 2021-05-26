@@ -57,6 +57,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #   define OLED_FONT_H "keyboards/baldor/glcdfont.c"
 #endif
 
+// Define layers count
+#ifndef DYNAMIC_KEYMAP_LAYER_COUNT
+#    define DYNAMIC_KEYMAP_LAYER_COUNT 16
+#endif
+
+// Define keymap macro count
+#ifndef DYNAMIC_KEYMAP_MACRO_COUNT
+#    define DYNAMIC_KEYMAP_MACRO_COUNT 32
+#endif
+
 // #ifdef BACKLIGHT_ENABLE
 // #    define BACKLIGHT_PIN B8
 // #    define BACKLIGHT_LEVELS 5
