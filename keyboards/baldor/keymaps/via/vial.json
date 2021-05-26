@@ -2,7 +2,7 @@
     "name": "Baldor MacroPad84",
     "vendorId": "0xFEED",
     "productId": "0x2B29",
-    "lighting": "qmk_rgblight",
+    "lighting": "none",
     "matrix": {
         "rows": 8,
         "cols": 12
