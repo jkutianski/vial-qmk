@@ -256,8 +256,9 @@ void raw_hid_receive(uint8_t *data, uint8_t length) {
                 }
                 case id_switch_matrix_state: {
 #ifdef VIAL_ENABLE
-                    /* We don't need this wannabe keylogger */
-                    goto skip;
+                    /* Disable wannabe keylogger unless unlocked */
+                    if (!vial_unlocked)
+                        goto skip;
 #endif
 
 #if ((MATRIX_COLS / 8 + 1) * MATRIX_ROWS <= 28)
@@ -434,9 +435,8 @@ void raw_hid_receive(uint8_t *data, uint8_t length) {
         }
 #endif
         default: {
-            // The command ID is not known
-            // Return the unhandled state
-            *command_id = id_unhandled;
+            // The command ID is not known let the keyboard implement it
+            raw_hid_receive_kb(data, length);
             break;
         }
     }
