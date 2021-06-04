@@ -8,6 +8,18 @@
         "cols": 16,
         "rows": 8
     },
+    "customKeycodes": [
+        {
+          "name": "TrkSens",
+          "title": "Change the Trackball sensivity",
+          "shortName": "TBMUL"
+        },
+        {
+          "name": "TrkSens / RCtl",
+          "title": "Change the Trackball sensivity and press Rigth Control",
+          "shortName": "RCTRL_TBMUL"
+        }
+    ],
     "layouts":
     {
         "keymap": [
