@@ -56,7 +56,7 @@
 
 // Define keymap macro count
 #ifndef DYNAMIC_KEYMAP_MACRO_COUNT
-#    define DYNAMIC_KEYMAP_MACRO_COUNT 16
+#    define DYNAMIC_KEYMAP_MACRO_COUNT 32
 #endif
 
 // This is the default EEPROM max address to use for dynamic keymaps.
