@@ -46,6 +46,8 @@
 
 enum compaq_keycodes {
     TBMUL = USER00,
-    RCTRL_TBMUL = USER01,
+    TBMUL_TOG,
+    TBSCRL,
+    TBSCRL_TOG,
     COMPAQ_SAFE_RANGE,
 };

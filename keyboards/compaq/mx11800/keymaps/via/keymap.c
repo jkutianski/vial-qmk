@@ -302,6 +302,7 @@ void matrix_scan_user(void) {
 };
 
 bool tb_disable_multiplier = false;
+bool tb_scroll = false;
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
@@ -313,13 +314,21 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 tb_disable_multiplier = false;
             }
             return false;
-        case RCTRL_TBMUL:
+        case TBMUL_TOG:
             if (record->event.pressed) {
-                tb_disable_multiplier = true;
-                register_code(KC_LCTL);
+                tb_disable_multiplier = !tb_disable_multiplier;
+            }
+            return false;
+        case TBSCRL:
+            if (record->event.pressed) {
+                tb_scroll = true;
             } else {
-                tb_disable_multiplier = false;
-                unregister_code(KC_LCTL);
+                tb_scroll = false;
+            }
+            return false;
+        case TBSCRL_TOG:
+            if (record->event.pressed) {
+                tb_scroll = !tb_scroll;
             }
             return false;
     }
@@ -329,10 +338,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
 void ps2_mouse_moved_user(report_mouse_t *mouse_report) {
     if (tb_disable_multiplier) {
-        mouse_report->x = mouse_report->x / PS2_MOUSE_X_MULTIPLIER;
-        mouse_report->y = mouse_report->y / PS2_MOUSE_Y_MULTIPLIER;
+        mouse_report->x = mouse_report->x / (PS2_MOUSE_X_MULTIPLIER);
+        mouse_report->y = mouse_report->y / (PS2_MOUSE_Y_MULTIPLIER);
+    }
 
-        mouse_report->h = mouse_report->h * PS2_MOUSE_SCROLL_DIVISOR_H;
-        mouse_report->v = mouse_report->v * PS2_MOUSE_SCROLL_DIVISOR_V;
+    if (tb_scroll) {
+        mouse_report->v = -mouse_report->y / (PS2_MOUSE_SCROLL_DIVISOR_V);
+        mouse_report->h = mouse_report->x / (PS2_MOUSE_SCROLL_DIVISOR_H);
     }
 }
