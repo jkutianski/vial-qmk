@@ -345,5 +345,7 @@ void ps2_mouse_moved_user(report_mouse_t *mouse_report) {
     if (tb_scroll) {
         mouse_report->v = -mouse_report->y / (PS2_MOUSE_SCROLL_DIVISOR_V);
         mouse_report->h = mouse_report->x / (PS2_MOUSE_SCROLL_DIVISOR_H);
+        mouse_report->x = 0;
+        mouse_report->y = 0;
     }
 }
