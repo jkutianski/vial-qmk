@@ -23,41 +23,19 @@ void led_sequence_trail(int count, int wait) {
     int i;
 
     for (i = 0; i < count; ++i) {
-        DDRD |= (1 << 6);
-        PORTD &= ~(1 << 6);
+        led_set(1);
         wait_ms(wait);
-        DDRD |= (1 << 7);
-        PORTD &= ~(1 << 7);
+        led_set(3);
         wait_ms(wait);
-        DDRB |= (1 << 7);
-        PORTB &= ~(1 << 7);
+        led_set(7);
         wait_ms(wait);
-        DDRD &= ~(1 << 6);
-        PORTD &= ~(1 << 6);
+        led_set(6);
         wait_ms(wait);
-        DDRD &= ~(1 << 7);
-        PORTD &= ~(1 << 7);
+        led_set(4);
         wait_ms(wait);
-        DDRB &= ~(1 << 7);
-        PORTB &= ~(1 << 7);
+        led_set(0);
         wait_ms(wait);
     }
-}
-
-void led_init_ports(void) {
-    DDRD &= ~(1 << 6);
-    PORTD &= ~(1 << 6);
-    DDRD &= ~(1 << 7);
-    PORTD &= ~(1 << 7);
-    DDRB &= ~(1 << 7);
-    PORTB &= ~(1 << 7);
-}
-
-void keyboard_pre_init_kb(void) {
-    // Call the keyboard pre init code.
-    led_init_ports();
-
-    keyboard_pre_init_user();
 }
 
 void keyboard_post_init_kb(void) {
@@ -79,35 +57,6 @@ void keyboard_post_init_kb(void) {
 
     dprint("Debug: Enabled\n");
     dprintf("Debug: Matrix: %b, Keyboard: %b, Mouse: %b\n", debug_matrix, debug_keyboard, debug_mouse);
-}
-
-// Set led state
-void led_set_kb(uint8_t usb_led) {
-    if (usb_led & (1 << USB_LED_NUM_LOCK)) {
-        DDRD |= (1 << 6);
-        PORTD &= ~(1 << 6);
-    } else {
-        DDRD &= ~(1 << 6);
-        PORTD &= ~(1 << 6);
-    }
-
-    if (usb_led & (1 << USB_LED_CAPS_LOCK)) {
-        DDRD |= (1 << 7);
-        PORTD &= ~(1 << 7);
-    } else {
-        DDRD &= ~(1 << 7);
-        PORTD &= ~(1 << 7);
-    }
-
-    if (usb_led & (1 << USB_LED_SCROLL_LOCK)) {
-        DDRB |= (1 << 7);
-        PORTB &= ~(1 << 7);
-    } else {
-        DDRB &= ~(1 << 7);
-        PORTB &= ~(1 << 7);
-    }
-
-    led_set_user(usb_led);
 }
 
 void bootmagic_lite(void) {
@@ -134,8 +83,4 @@ void bootmagic_lite(void) {
         // Jump to bootloader.
         bootloader_jump();
     }
-}
-
-bool process_record_kb(uint16_t keycode, keyrecord_t* record) {
-    return process_record_user(keycode, record);
 }
