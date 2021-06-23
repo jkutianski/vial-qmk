@@ -18,9 +18,6 @@
 
 #include "quantum.h"
 #include "via.h"
-#ifdef TAP_DANCE_ENABLE
-#    include "tap_dance.h"
-#endif
 
 // clang-format off
 #define LAYOUT( \

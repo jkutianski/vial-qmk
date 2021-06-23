@@ -72,9 +72,6 @@ LTO_ENABLE = yes
 
 # AUDIO_ENABLE = yes
 
-# Added ACTION_TAP_DANCE_SHIFTED
-SRC +=  ../../tap_dance.c
-
 # Set development
 OPT_DEFS += -DDEVELOPMENT=$(devel)
 
