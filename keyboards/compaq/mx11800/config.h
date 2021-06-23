@@ -38,6 +38,12 @@
 /* COL2ROW or ROW2COL */
 #define DIODE_DIRECTION COL2ROW
 
+// Leds definition
+#define LED_NUM_LOCK_PIN D6
+#define LED_CAPS_LOCK_PIN D7
+#define LED_SCROLL_LOCK_PIN B7
+#define LED_PIN_ON_STATE 0
+
 // Set 0 if debouncing isn't needed
 #define DEBOUNCE 5
 
@@ -159,11 +165,6 @@
             EIMSK &= ~(1 << INT2); \
         } while (0)
 #    define PS2_INT_VECT INT2_vect
-#endif
-
-// Tap Dance settings
-#ifdef TAP_DANCE_ENABLE
-#    define TAPPING_TERM 170
 #endif
 
 /* For production disable dubug and print */
