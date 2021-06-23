@@ -16,43 +16,10 @@
 
 #include QMK_KEYBOARD_H
 #include <print.h>
+#include "raw_hid.h"
+#include "quantum.h"
 
 #define ____ KC_TRANSPARENT
-
-#ifdef TAP_DANCE_ENABLE
-// All tap dance functions would go here.
-qk_tap_dance_action_t tap_dance_actions[] = {
-    // Keypad tap dance keys
-    [0] = ACTION_TAP_DANCE_DOUBLE(KC_NLCK, KC_CALC),  // 0x5700
-    [1] = ACTION_TAP_DANCE_DOUBLE(KC_PENT, KC_TAB),   // 0x5701
-    [2] = ACTION_TAP_DANCE_DOUBLE(KC_PDOT, KC_COMM),  // 0x5702
-    // 4rd row tap dance keys
-    [3]  = ACTION_TAP_DANCE_SHIFTED(KC_GRV),   // 0x5703
-    [4]  = ACTION_TAP_DANCE_SHIFTED(KC_1),     // 0x5704
-    [5]  = ACTION_TAP_DANCE_SHIFTED(KC_2),     // 0x5705
-    [6]  = ACTION_TAP_DANCE_SHIFTED(KC_3),     // 0x5706
-    [7]  = ACTION_TAP_DANCE_SHIFTED(KC_4),     // 0x5707
-    [8]  = ACTION_TAP_DANCE_SHIFTED(KC_5),     // 0x5708
-    [9]  = ACTION_TAP_DANCE_SHIFTED(KC_6),     // 0x5709
-    [10] = ACTION_TAP_DANCE_SHIFTED(KC_7),     // 0x570A
-    [11] = ACTION_TAP_DANCE_SHIFTED(KC_8),     // 0x570B
-    [12] = ACTION_TAP_DANCE_SHIFTED(KC_9),     // 0x570C
-    [13] = ACTION_TAP_DANCE_SHIFTED(KC_0),     // 0x570D
-    [14] = ACTION_TAP_DANCE_SHIFTED(KC_MINS),  // 0x570E
-    [15] = ACTION_TAP_DANCE_SHIFTED(KC_EQL),   // 0x570F
-    // 5th row tap dance keys
-    [16] = ACTION_TAP_DANCE_SHIFTED(KC_LBRC),  // 0x5710
-    [17] = ACTION_TAP_DANCE_SHIFTED(KC_RBRC),  // 0x5711
-    [18] = ACTION_TAP_DANCE_SHIFTED(KC_BSLS),  // 0x5712
-    // 6th row tap dance keys
-    [19] = ACTION_TAP_DANCE_SHIFTED(KC_SCLN),  // 0x5713
-    [20] = ACTION_TAP_DANCE_SHIFTED(KC_QUOT),  // 0x5714
-    // 7th row tap dance keys
-    [21] = ACTION_TAP_DANCE_SHIFTED(KC_COMM),  // 0x5715
-    [22] = ACTION_TAP_DANCE_SHIFTED(KC_DOT),   // 0x5716
-    [23] = ACTION_TAP_DANCE_SHIFTED(KC_SLSH),  // 0x5717
-};
-#endif
 
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -256,7 +223,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 // clang-format on
 
 static uint16_t led_timer;
-bool            led_layer_state = 0;
+bool            led_layer_state = false;
 
 // Blink at layer 1, 2 or 3
 void matrix_scan_user(void) {
@@ -267,34 +234,70 @@ void matrix_scan_user(void) {
         switch (layer) {
             case 1:
                 if (!led_layer_state) {
-                    led_set_kb(0);
+                    led_set(0);
                 } else {
-                    led_set_kb(1);
+                    led_set(4);
                 }
 
                 led_layer_state = !led_layer_state;
                 break;
             case 2:
                 if (!led_layer_state) {
-                    led_set_kb(0);
+                    led_set(0);
                 } else {
-                    led_set_kb(2);
+                    led_set(2);
                 }
 
                 led_layer_state = !led_layer_state;
                 break;
             case 3:
                 if (!led_layer_state) {
-                    led_set_kb(0);
+                    led_set(0);
                 } else {
-                    led_set_kb(4);
+                    led_set(6);
+                }
+
+                led_layer_state = !led_layer_state;
+                break;
+            case 4:
+                if (!led_layer_state) {
+                    led_set(0);
+                } else {
+                    led_set(1);
+                }
+
+                led_layer_state = !led_layer_state;
+                break;
+            case 5:
+                if (!led_layer_state) {
+                    led_set(0);
+                } else {
+                    led_set(5);
+                }
+
+                led_layer_state = !led_layer_state;
+                break;
+            case 6:
+                if (!led_layer_state) {
+                    led_set(0);
+                } else {
+                    led_set(3);
+                }
+
+                led_layer_state = !led_layer_state;
+                break;
+            case 7:
+                if (!led_layer_state) {
+                    led_set(0);
+                } else {
+                    led_set(7);
                 }
 
                 led_layer_state = !led_layer_state;
                 break;
             default:
-                led_set_kb(usb_led);
-                led_layer_state = 0;
+                led_set(usb_led);
+                led_layer_state = false;
         }
 
         led_timer = timer_read();
@@ -348,4 +351,47 @@ void ps2_mouse_moved_user(report_mouse_t *mouse_report) {
         mouse_report->x = 0;
         mouse_report->y = 0;
     }
+}
+
+void raw_hid_receive_kb(uint8_t *data, uint8_t length) {
+    if(data[0] == 0xFC){
+        switch (data[1]) {
+            case 0x01:{
+                // move to layer
+                data[1] = 0xFD;
+                layer_move(data[2]);
+                break;
+            }
+            case 0x02:{
+                // turn on layer
+                data[1] = 0xFD;
+                layer_on(data[2]);
+                break;
+            }
+            case 0x03:{
+                // turn off layer
+                data[1] = 0xFD;
+                layer_off(data[2]);
+                break;
+            }
+        }
+    }
+}
+
+uint8_t last_layer_state = 0;
+
+layer_state_t layer_state_set_user(layer_state_t state) {
+    uint8_t data[32] = {0};
+    data[0] = 0xFC;
+    data[1] = 0xFD;
+    data[2] = biton32(state);
+
+    // Layer change
+    if (last_layer_state != data[2]) {
+        raw_hid_send(data, 32);
+
+        last_layer_state = data[2];
+    }
+
+    return state;
 }
