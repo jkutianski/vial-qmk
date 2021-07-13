@@ -1,5 +1,7 @@
 #include QMK_KEYBOARD_H
 #include <stdio.h>
+#include "raw_hid.h"
+#include "quantum.h"
 
 #define ____ KC_TRANSPARENT
 
@@ -203,4 +205,46 @@ void encoder_update_user(uint8_t index, bool clockwise) {
             tap_code(____);
         }
     }
+}
+
+void raw_hid_receive_kb(uint8_t *data, uint8_t length) {
+    if(data[0] == 0xFC){
+        switch (data[1]) {
+            case 0x01:{
+                // move to layer
+                data[1] = 0xFD;
+                layer_move(data[2]);
+                break;
+            }
+            case 0x02:{
+                // turn on layer
+                data[1] = 0xFD;
+                layer_on(data[2]);
+                break;
+            }
+            case 0x03:{
+                // turn off layer
+                data[1] = 0xFD;
+                layer_off(data[2]);
+                break;
+            }
+        }
+    }
+}
+
+uint8_t last_layer_state = 0;
+
+layer_state_t layer_state_set_user(layer_state_t state) {
+    uint8_t data[32] = {0};
+    data[0] = 0xFC;
+    data[1] = 0xFD;
+    data[2] = biton32(state);
+
+    if (last_layer_state != data[2]) {
+        raw_hid_send(data, 32);
+
+        last_layer_state = data[2];
+    }
+
+    return state;
 }

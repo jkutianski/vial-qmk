@@ -68,6 +68,8 @@ SHARED_EP_ENABLE = no
 KEYBOARD_SHARED_EP = yes
 MOUSE_SHARED_EP = yes
 
+RAW_ENABLE = yes
+
 # Optimization
 LTO_ENABLE = yes
 
