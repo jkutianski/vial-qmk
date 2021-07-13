@@ -19,10 +19,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /* USB Device descriptor parameter */
 #define VENDOR_ID       0xFEED
-#define PRODUCT_ID      0x2B29
+#define PRODUCT_ID      0x2B2A
 #define DEVICE_VER      0x0001
 #define MANUFACTURER    Baldor
-#define PRODUCT         MacroPad84
+#define PRODUCT         MacroPad84 STM32
 #define DESCRIPTION     Macropad keyboard
 
 /* key matrix size */
@@ -41,11 +41,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define ENCODERS_PAD_A { B4 }
 #define ENCODERS_PAD_B { B5 }
 
-#define ENCODER_RESOLUTION 4
+#define ENCODER_RESOLUTION 2
 
 #define VIAL_KEYBOARD_UID {0x6F, 0xC5, 0xEE, 0x60, 0x90, 0x92, 0x53, 0xA4}
 #define VIAL_UNLOCK_COMBO_ROWS { 7 }
-#define VIAL_UNLOCK_COMBO_COLS { 0 }
+#define VIAL_UNLOCK_COMBO_COLS { 6 }
 
 #ifdef OLED_DRIVER_ENABLE
 #   define OLED_TIMEOUT 60000

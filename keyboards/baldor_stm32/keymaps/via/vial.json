@@ -1,7 +1,7 @@
 {
-    "name": "Baldor MacroPad84",
+    "name": "Baldor MacroPad84 STM32",
     "vendorId": "0xFEED",
-    "productId": "0x2B29",
+    "productId": "0x2B2A",
     "lighting": "qmk_rgblight",
     "matrix": {
         "rows": 8,
